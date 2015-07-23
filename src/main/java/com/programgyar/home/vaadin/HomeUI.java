@@ -15,7 +15,7 @@ import com.vaadin.ui.UI;
 @Theme("valo")
 public class HomeUI extends UI {
 	Grid contactList = new Grid();
-	Button newContact = new Button("New contact" + TempService.getTemp());
+	Button newContact = new Button("New contact " + TempService.getTemp() + " °C");
 
 	@Override
 	protected void init(VaadinRequest request) {
