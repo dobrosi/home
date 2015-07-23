@@ -12,7 +12,7 @@ public class TempService {
 
 		try {
 			String str = Files.toString(f, Charsets.UTF_8);
-			return new Double(Math.round(Double.parseDouble(str.split("=")[2]) / 100) / 10);
+			return new Double(Double.parseDouble(str.split("=")[2]) / 1000D);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
