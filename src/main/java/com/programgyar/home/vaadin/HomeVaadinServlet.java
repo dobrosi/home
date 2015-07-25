@@ -6,7 +6,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinServlet;
 
 @WebServlet(value = "/*", asyncSupported = true)
-@VaadinServletConfiguration(productionMode = false, ui = HomeUI.class)
+@VaadinServletConfiguration(productionMode = false, ui = MainUI.class)
 public class HomeVaadinServlet extends VaadinServlet {
 
 	/**
