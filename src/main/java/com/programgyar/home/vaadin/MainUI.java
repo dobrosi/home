@@ -22,6 +22,7 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("valo")
 @Push(transport = Transport.WEBSOCKET)
 public class MainUI extends UI {
+public static boolean virgin = true;
 	Grid pinList = new Grid();
 	Button startButton = new Button("Start " + TempService.getTemp() + " °C", this::startClicked);
 	Button addListenerButton = new Button("Add listener", this::addListenerClicked);
@@ -30,7 +31,10 @@ public class MainUI extends UI {
 	protected void init(VaadinRequest request) {
 		configureComponents();
 		buildLayout();
+if(virgin) {
 		startGpio();
+virgin = false;
+}
 	}
 
 	private void startGpio() {
