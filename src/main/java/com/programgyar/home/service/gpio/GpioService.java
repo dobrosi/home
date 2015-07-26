@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.Pin;
+import com.pi4j.io.gpio.PinPullResistance;
+import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.event.GpioPinListener;
 
 public class GpioService {
@@ -18,5 +21,11 @@ public class GpioService {
 		final GpioController gpio = GpioFactory.getInstance();
 
 		gpio.getProvisionedPins().forEach(f -> f.addListener(listener));
+	}
+
+	public static void startGpio(Pin pin) {
+		final GpioController gpio = GpioFactory.getInstance();
+		
+		gpio.provisionDigitalInputPin(pin, PinPullResistance.PULL_DOWN);
 	}
 }

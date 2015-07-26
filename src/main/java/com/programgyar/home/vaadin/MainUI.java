@@ -1,5 +1,7 @@
 package com.programgyar.home.vaadin;
 
+import com.pi4j.io.gpio.PinPullResistance;
+import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.programgyar.home.service.TempService;
@@ -28,6 +30,11 @@ public class MainUI extends UI {
 	protected void init(VaadinRequest request) {
 		configureComponents();
 		buildLayout();
+		startGpio();
+	}
+
+	private void startGpio() {
+		GpioService.startGpio(RaspiPin.GPIO_00);
 	}
 
 	private void configureComponents() {
