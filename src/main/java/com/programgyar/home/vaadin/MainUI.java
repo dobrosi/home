@@ -38,7 +38,7 @@ public static boolean virgin = true;
 	}
 
 	private void startGpio() {
-		GpioService.startGpio(RaspiPin.GPIO_00);
+		GpioService.startGpio();
 	}
 
 	private void configureComponents() {
