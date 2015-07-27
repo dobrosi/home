@@ -29,12 +29,12 @@ public static boolean virgin = true;
 
 	@Override
 	protected void init(VaadinRequest request) {
+		if(virgin) {
+			startGpio();
+			virgin = false;
+		}
 		configureComponents();
 		buildLayout();
-if(virgin) {
-		startGpio();
-virgin = false;
-}
 	}
 
 	private void startGpio() {
