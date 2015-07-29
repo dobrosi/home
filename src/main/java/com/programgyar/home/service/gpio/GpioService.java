@@ -5,13 +5,8 @@ import java.util.stream.Collectors;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.PinPullResistance;
-import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.event.GpioPinListener;
-import com.pi4j.wiringpi.Gpio;
-import com.pi4j.wiringpi.GpioUtil;
 
 public class GpioService {
 	private static List<PinDto> pinList = null;
@@ -31,20 +26,10 @@ public class GpioService {
 		gpio.getProvisionedPins().forEach(f -> f.addListener(listener));
 	}
 
-	public static void startGpio() {
+	public static void startGpio(GpioPinListener l) {
 		final GpioController gpio = GpioFactory.getInstance();
 
-		for (int pin = 0; pin < 16; pin++) {
-			int dir = GpioUtil.getDirection(pin);
-			int value = Gpio.digitalRead(pin);
-			PinPullResistance resistance = value == 0 ? PinPullResistance.PULL_DOWN : PinPullResistance.PULL_UP;
-			PinState state = value == 0 ? PinState.LOW : PinState.HIGH;
-			Pin gpioPin = RaspiPin.getPinByName("GPIO " + pin);
-			if (dir == GpioUtil.DIRECTION_IN) {
-				gpio.provisionDigitalInputPin(gpioPin, resistance);
-			} else {
-				gpio.provisionDigitalOutputPin(gpioPin, state);
-			}
-		}
+		gpio.provisionDigitalInputPin(RaspiPin.GPIO_00).addListener(l);
+		gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
 	}
 }

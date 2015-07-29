@@ -1,7 +1,5 @@
 package com.programgyar.home.vaadin;
 
-import com.pi4j.io.gpio.PinPullResistance;
-import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.programgyar.home.service.TempService;
@@ -15,21 +13,22 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Title("HOME")
 @Theme("valo")
 @Push(transport = Transport.WEBSOCKET)
-public class MainUI extends UI {
-public static boolean virgin = true;
+public class MainUI extends UI implements GpioPinListenerDigital {
+	public static boolean virgin = true;
 	Grid pinList = new Grid();
 	Button startButton = new Button("Start " + TempService.getTemp() + " °C", this::startClicked);
 	Button addListenerButton = new Button("Add listener", this::addListenerClicked);
 
 	@Override
 	protected void init(VaadinRequest request) {
-		if(virgin) {
+		if (virgin) {
 			startGpio();
 			virgin = false;
 		}
@@ -38,7 +37,7 @@ public static boolean virgin = true;
 	}
 
 	private void startGpio() {
-		GpioService.startGpio();
+		GpioService.startGpio(this);
 	}
 
 	private void configureComponents() {
@@ -58,7 +57,6 @@ public static boolean virgin = true;
 
 	private void startClicked(Button.ClickEvent e) {
 		System.out.println("start clicked  " + e);
-		// GpioListener.run(this::gpioChange);
 
 		refreshData();
 	}
@@ -76,7 +74,9 @@ public static boolean virgin = true;
 		pinList.setContainerDataSource(new BeanItemContainer<>(PinDto.class, GpioService.getPinList()));
 	}
 
-	private void gpioChange(GpioPinDigitalStateChangeEvent event) {
+	@Override
+	public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 		System.out.println("callback " + event);
+		Notification.show("gpioChange: " + event);
 	}
 }
