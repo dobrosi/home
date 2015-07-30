@@ -21,7 +21,9 @@ public class Database {
 		PersistentData d = (PersistentData) map.get(key);
 		if (d == null) {
 			d = defaultValue;
-			save(key, d);
+			if (d != null) {
+				save(key, d);
+			}
 		}
 		if (d != null) {
 			d.afterLoad();
