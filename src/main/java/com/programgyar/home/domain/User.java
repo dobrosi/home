@@ -1,6 +1,8 @@
-package mapdb;
+package com.programgyar.home.domain;
 
-public class Data extends PersistentData {
+import com.programgyar.memdb.PersistentData;
+
+public class User extends PersistentData {
 	/**
 	 * 
 	 */

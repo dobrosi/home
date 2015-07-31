@@ -1,7 +1,8 @@
-package com.programgyar.home.vaadin;
+package com.programgyar.home.servlet;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.programgyar.home.vaadin.MainUI;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinServlet;
 

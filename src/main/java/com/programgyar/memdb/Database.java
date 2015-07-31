@@ -1,4 +1,4 @@
-package mapdb;
+package com.programgyar.memdb;
 
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
@@ -14,25 +14,36 @@ public class Database {
 		}
 	}
 
-	public static PersistentData load(Object key) {
-		return load(key, null);
+	public static <T extends PersistentData> T get(Class<T> clazz) {
+		return get(clazz, null);
 	}
 
-	public static PersistentData load(Object key, PersistentData defaultValue) {
+	public static <T extends PersistentData> T get(Class<PersistentData> clazz, T defaultValue) {
+		return get(clazz.getName(), defaultValue);
+	}
+
+	public static <T extends PersistentData> T get(Object key) {
+		return get(key, null);
+	}
+
+	public static <T extends PersistentData> T get(Object key, T defaultValue) {
+		if (map == null) {
+			open();
+		}
 		PersistentData d = (PersistentData) map.get(key);
 		if (d == null) {
 			d = defaultValue;
 			if (d != null) {
-				save(key, d);
+				put(key, d);
 			}
 		}
 		if (d != null) {
 			d.afterLoad();
 		}
-		return d;
+		return (T) d;
 	}
 
-	private static void save(Object key, PersistentData d) {
+	private static void put(Object key, PersistentData d) {
 		d.beforeSave();
 		map.put(key, d);
 		d.afterSave();

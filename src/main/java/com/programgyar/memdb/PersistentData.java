@@ -1,4 +1,4 @@
-package mapdb;
+package com.programgyar.memdb;
 
 import java.io.Serializable;
 

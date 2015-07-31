@@ -1,17 +1,18 @@
-package com.programgyar.home.service.gpio;
+package com.programgyar.home.domain;
 
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.PinMode;
 import com.pi4j.io.gpio.PinPullResistance;
+import com.programgyar.memdb.PersistentData;
 
-public class PinDto {
-	private String name;
+public class PinDto extends PersistentData {
+	public String name;
 
-	private int address;
+	public int address;
 
-	private PinMode mode;
+	public PinMode mode;
 
-	private boolean value;
+	public boolean value;
 
 	public PinDto(GpioPin f) {
 		this.name = f.getName();
