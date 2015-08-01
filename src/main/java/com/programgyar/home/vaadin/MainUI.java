@@ -40,7 +40,7 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 			@Override
 			public void error(com.vaadin.server.ErrorEvent event) {
 				event.getThrowable().printStackTrace();
-				Notification.show(event.getThrowable().getLocalizedMessage(), Type.ERROR_MESSAGE);
+				Notification.show(event.getThrowable().getCause().getLocalizedMessage(), Type.ERROR_MESSAGE);
 			}
 		});
 
