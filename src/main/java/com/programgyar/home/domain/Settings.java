@@ -8,12 +8,16 @@ import com.programgyar.home.service.gpio.GpioService;
 import com.programgyar.memdb.PersistentData;
 
 public class Settings extends PersistentData {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 599167131335163097L;
 	public List<PinDto> pinList = new ArrayList<>();
 	public HeatMode heatMode;
 
 	@Override
 	protected void afterLoad() {
 		HeatService.switchMode(heatMode);
-		GpioService.init(pinList);
+		GpioService.createPins(pinList);
 	}
 }

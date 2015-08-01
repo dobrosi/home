@@ -3,22 +3,35 @@ package com.programgyar.home.domain;
 import com.pi4j.io.gpio.GpioPin;
 import com.pi4j.io.gpio.PinMode;
 import com.pi4j.io.gpio.PinPullResistance;
+import com.pi4j.io.gpio.PinState;
 import com.programgyar.memdb.PersistentData;
 
 public class PinDto extends PersistentData {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6249103365492718369L;
+
+	public GpioPin pin;
+
 	public String name;
 
-	public int address;
+	public String address;
 
 	public PinMode mode;
 
-	public boolean value;
+	public PinState state;
 
-	public PinDto(GpioPin f) {
-		this.name = f.getName();
-		this.address = f.getPin().getAddress();
-		this.mode = f.getMode();
-		this.value = f.isPullResistance(PinPullResistance.PULL_UP);
+	public PinDto(GpioPin pin) {
+		this.pin = pin;
+
+		this.name = pin.getName();
+		this.address = "" + pin.getPin().getAddress();
+		this.mode = pin.getMode();
+		this.state = pin.isPullResistance(PinPullResistance.PULL_UP) ? PinState.HIGH : PinState.LOW;
+	}
+
+	public PinDto() {
 	}
 
 	public String getName() {
@@ -29,11 +42,11 @@ public class PinDto extends PersistentData {
 		this.name = name;
 	}
 
-	public int getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(int address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 
@@ -45,11 +58,12 @@ public class PinDto extends PersistentData {
 		this.mode = mode;
 	}
 
-	public boolean isValue() {
-		return value;
+	public PinState getState() {
+		return state;
 	}
 
-	public void setValue(boolean value) {
-		this.value = value;
+	public void setState(PinState state) {
+		this.state = state;
 	}
+
 }

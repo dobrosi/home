@@ -14,19 +14,20 @@ public class Database {
 		}
 	}
 
-	public static <T extends PersistentData> T get(Class<T> clazz) {
-		return get(clazz, null);
+	public static <T extends PersistentData> T load(Class<T> clazz) {
+		return load(clazz, null);
 	}
 
-	public static <T extends PersistentData> T get(Class<PersistentData> clazz, T defaultValue) {
-		return get(clazz.getName(), defaultValue);
+	public static <T extends PersistentData> T load(Class<PersistentData> clazz, T defaultValue) {
+		return load(clazz.getName(), defaultValue);
 	}
 
-	public static <T extends PersistentData> T get(Object key) {
-		return get(key, null);
+	public static <T extends PersistentData> T load(Object key) {
+		return load(key, null);
 	}
 
-	public static <T extends PersistentData> T get(Object key, T defaultValue) {
+	@SuppressWarnings("unchecked")
+	public static <T extends PersistentData> T load(Object key, T defaultValue) {
 		if (map == null) {
 			open();
 		}
@@ -34,7 +35,7 @@ public class Database {
 		if (d == null) {
 			d = defaultValue;
 			if (d != null) {
-				put(key, d);
+				save(key, d);
 			}
 		}
 		if (d != null) {
@@ -43,7 +44,7 @@ public class Database {
 		return (T) d;
 	}
 
-	private static void put(Object key, PersistentData d) {
+	private static void save(Object key, PersistentData d) {
 		d.beforeSave();
 		map.put(key, d);
 		d.afterSave();

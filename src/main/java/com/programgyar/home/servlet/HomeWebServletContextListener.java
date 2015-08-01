@@ -3,7 +3,7 @@ package com.programgyar.home.servlet;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 
-import com.programgyar.memdb.Database;
+import com.programgyar.home.service.HomeDatabase;
 import com.vaadin.external.org.slf4j.Logger;
 import com.vaadin.external.org.slf4j.LoggerFactory;
 
@@ -14,12 +14,12 @@ public class HomeWebServletContextListener implements javax.servlet.ServletConte
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		logger.info("Home app started. Database open.");
-		Database.open();
+		HomeDatabase.open();
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		Database.commit();
+		HomeDatabase.commit();
 		logger.info("Home app stoped. Database commit.");
 	}
 }

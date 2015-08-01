@@ -3,14 +3,19 @@ package com.programgyar.home.service.gpio;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPin;
+import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinMode;
 import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListener;
+import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.programgyar.home.domain.PinDto;
+import com.programgyar.home.service.HomeDatabase;
 
 public class GpioService {
 	public static Map<String, PinDto> pinMap = new HashMap<>();
@@ -27,24 +32,37 @@ public class GpioService {
 		gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
 	}
 
-	public static void addPin(PinDto pinDto) {
+	public static GpioPin createPin(PinDto pinDto) {
 		final GpioController gpio = GpioFactory.getInstance();
-		GpioPin pin;
+		GpioPin pin = null;
+		Pin p = RaspiPin.getPinByName("GPIO " + pinDto.address);
 		if (pinDto.mode == PinMode.DIGITAL_INPUT) {
-			pin = gpio.provisionDigitalInputPin(RaspiPin.getPinByName(pinDto.name));
+			pin = gpio.provisionDigitalInputPin(p);
 		} else if (pinDto.mode == PinMode.DIGITAL_OUTPUT) {
-			pin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByName(pinDto.name));
+			pin = gpio.provisionDigitalOutputPin(p);
 		}
-		pinMap.put(pinDto.name, pin);
+		pin.addListener(new GpioPinListenerDigital() {
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+				pinDto.state = event.getState();
+			}
+		});
+		return pinDto.pin = pin;
 	}
 
-	public static void init(List<PinDto> pinList) {
-		pinList.forEach(pin -> addPin(pin));
+	public static void createPins(List<PinDto> pinList) {
+		pinList.forEach(pin -> createPin(pin));
 	}
 
-	private static void removePin(PinDto pin) {
+	public static void removePin(PinDto pin) {
 		final GpioController gpio = GpioFactory.getInstance();
-
+		gpio.unprovisionPin(pin.pin);
 	}
 
+	public static List<PinDto> getPinList() {
+		final GpioController gpio = GpioFactory.getInstance();
+		List<PinDto> res = gpio.getProvisionedPins().stream().map(p -> new PinDto(p)).collect(Collectors.toList());
+		HomeDatabase.settings.pinList.clear();
+		return res;
+	}
 }

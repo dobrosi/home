@@ -8,7 +8,7 @@ import com.programgyar.memdb.Database;
 public class TestMapDb {
 	@Test
 	public void test() {
-		User d = (User) Database.get(User.class, new User());
+		User d = (User) Database.load(User.class, new User());
 		System.out.println(d);
 
 		d.age = 19;
