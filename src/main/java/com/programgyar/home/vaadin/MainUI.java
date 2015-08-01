@@ -46,6 +46,7 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 
 		configureComponents();
 		buildLayout();
+		refreshPins();
 	}
 
 	private void configureComponents() {
