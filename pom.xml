@@ -38,9 +38,9 @@
 				<configuration>
 					<scanIntervalSeconds>1</scanIntervalSeconds>
 					<stopKey>foo</stopKey>
+					<stopWait>10</stopWait>
 					<stopPort>9999</stopPort>
 					<httpConnector>
-
 						<port>9090</port>
 					</httpConnector>
 				</configuration>
