@@ -2,6 +2,7 @@ package com.programgyar.home.service;
 
 import com.programgyar.home.domain.Settings;
 import com.programgyar.home.domain.Users;
+import com.programgyar.home.service.gpio.GpioService;
 import com.programgyar.memdb.Database;
 import com.vaadin.external.org.slf4j.Logger;
 import com.vaadin.external.org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ public class HomeDatabase extends Database {
 	}
 
 	public static void commit() {
+		settings.pinList = GpioService.getPinList();
 		save(Settings.class, settings);
 		Database.commit();
 	}

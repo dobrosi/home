@@ -66,7 +66,6 @@ public class GpioService {
 	public static List<PinDto> getPinList() {
 		final GpioController gpio = GpioFactory.getInstance();
 		List<PinDto> res = gpio.getProvisionedPins().stream().map(p -> new PinDto(p)).collect(Collectors.toList());
-		HomeDatabase.settings.pinList.clear();
 		return res;
 	}
 }
