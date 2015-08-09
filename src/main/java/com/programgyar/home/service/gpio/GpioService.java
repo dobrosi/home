@@ -35,7 +35,7 @@ public class GpioService {
 	public static GpioPin createPin(PinDto pinDto) {
 		final GpioController gpio = GpioFactory.getInstance();
 		GpioPin pin = null;
-		Pin p = RaspiPin.getPinByName("GPIO " + pinDto.address);
+		Pin p = getPin(pinDto);
 		if (pinDto.mode == PinMode.DIGITAL_INPUT) {
 			pin = gpio.provisionDigitalInputPin(p);
 		} else if (pinDto.mode == PinMode.DIGITAL_OUTPUT) {
@@ -50,11 +50,15 @@ public class GpioService {
 		return pinDto.pin = pin;
 	}
 
+	private static Pin getPin(PinDto pinDto) {
+		return RaspiPin.getPinByName("GPIO " + pinDto.address);
+	}
+
 	public static void createPins(List<PinDto> pinList) {
 		pinList.forEach(pin -> createPin(pin));
 	}
 
-	public static void removePin(PinDto pin) {
+	public static void deletePin(PinDto pin) {
 		final GpioController gpio = GpioFactory.getInstance();
 		gpio.unprovisionPin(pin.pin);
 	}

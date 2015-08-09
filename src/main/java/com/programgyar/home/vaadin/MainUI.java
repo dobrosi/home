@@ -8,12 +8,15 @@ import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.SelectionEvent;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -29,7 +32,9 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 	 */
 	private static final long serialVersionUID = -1431076197221681802L;
 	Grid pinList = new Grid();
+	Button refreshButton = new Button("Refresh");
 	Button newPinButton = new Button("New pin");
+	Button deletePinButton = new Button("Delete pin");
 
 	PinForm contactForm = new PinForm();
 
@@ -46,22 +51,34 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 
 		configureComponents();
 		buildLayout();
-		refreshPins();
+		// refreshPins();
 	}
 
 	private void configureComponents() {
-		newPinButton.addClickListener(e -> contactForm.edit(new PinDto()));
+		setResponsive(true);
+		pinList.setResponsive(true);
+
+		refreshButton = new Button("Refresh", this::refreshPins);
+		newPinButton = new Button("New pin", this::newPin);
+		deletePinButton = new Button("Delete pin", this::deletePin);
 
 		pinList.setContainerDataSource(new BeanItemContainer<>(PinDto.class));
 
 		pinList.setColumnOrder("name", "address", "state");
 		pinList.setSelectionMode(Grid.SelectionMode.SINGLE);
-		pinList.addSelectionListener(e -> contactForm.edit((PinDto) pinList.getSelectedRow()));
+		pinList.addSelectionListener(e -> selectedRow(e));
+		pinList.setSelectionMode(SelectionMode.SINGLE);
+	}
+
+	private void selectedRow(SelectionEvent e) {
+		PinDto selected = (PinDto) pinList.getSelectedRow();
+		contactForm.edit(selected);
+		deletePinButton.setEnabled(selected != null);
 	}
 
 	private void buildLayout() {
 
-		HorizontalLayout actions = new HorizontalLayout(newPinButton);
+		HorizontalLayout actions = new HorizontalLayout(refreshButton, newPinButton);
 		actions.setWidth("100%");
 		actions.setExpandRatio(newPinButton, 1);
 
@@ -84,8 +101,16 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 		Notification.show("gpioChange: " + event);
 	}
 
-	public void refreshPins() {
+	public void refreshPins(ClickEvent e) {
 		pinList.setContainerDataSource(new BeanItemContainer<>(PinDto.class, GpioService.getPinList()));
 		contactForm.setVisible(false);
+	}
+
+	public void newPin(ClickEvent e) {
+		contactForm.edit(new PinDto());
+	}
+	
+	public void deletePin(ClickEvent e) {
+		GpioService.deletePin((PinDto)pinList.getSelectedRow());
 	}
 }

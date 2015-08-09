@@ -57,7 +57,7 @@ public class PinForm extends FormLayout {
 
 			String msg = String.format("Saved '%s'.", pinDto.name);
 			Notification.show(msg, Type.TRAY_NOTIFICATION);
-			getUI().refreshPins();
+			getUI().refreshPins(null);
 		} catch (FieldGroup.CommitException e) {
 			// Validation exceptions could be shown here
 		}

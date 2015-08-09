@@ -9,7 +9,7 @@ public class Database {
 	public static void open() {
 		if (map == null) {
 			MVStore s = MVStore.open("db");
-			s.setAutoCommitDelay(10000);
+			s.setAutoCommitDelay(60000);
 			map = s.openMap("data");
 		}
 	}
@@ -44,7 +44,7 @@ public class Database {
 		return (T) d;
 	}
 
-	private static void save(Object key, PersistentData d) {
+	public static void save(Object key, PersistentData d) {
 		d.beforeSave();
 		map.put(key, d);
 		d.afterSave();
