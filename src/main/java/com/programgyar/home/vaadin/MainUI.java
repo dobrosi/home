@@ -52,21 +52,6 @@ public class MainUI extends UI {
 		configureComponents();
 		buildLayout();
 		refreshPins(null);
-		addPinListeners();
-	}
-
-	private void addPinListeners() {
-		GpioService.getPinList().forEach(pin -> pin.pin.addListener(new GpioPinListenerDigital() {
-
-			@Override
-			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-				System.out.println("callback " + event);
-				//Notification.show("gpioChange: " + event);
-				pin.state = event.getState();
-				refreshPins(null);
-			}
-
-		}));
 	}
 
 	private void configureComponents() {

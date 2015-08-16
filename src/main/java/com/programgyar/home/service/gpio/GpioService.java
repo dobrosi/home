@@ -15,7 +15,6 @@ import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListener;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.programgyar.home.domain.PinDto;
-import com.programgyar.home.service.HomeDatabase;
 
 public class GpioService {
 	public static Map<String, PinDto> pinMap = new HashMap<>();

@@ -1,8 +1,8 @@
 package com.programgyar.home.domain;
 
 import com.pi4j.io.gpio.GpioPin;
+import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.PinMode;
-import com.pi4j.io.gpio.PinPullResistance;
 import com.pi4j.io.gpio.PinState;
 import com.programgyar.memdb.PersistentData;
 
@@ -28,7 +28,7 @@ public class PinDto extends PersistentData {
 		this.name = pin.getName();
 		this.address = "" + pin.getPin().getAddress();
 		this.mode = pin.getMode();
-		this.state = pin.isPullResistance(PinPullResistance.PULL_UP) ? PinState.HIGH : PinState.LOW;
+		this.state = pin instanceof GpioPinDigitalInput ? ((GpioPinDigitalInput) pin).getState() : null;
 	}
 
 	public PinDto() {
