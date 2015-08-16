@@ -61,7 +61,8 @@ public class MainUI extends UI {
 			@Override
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 				System.out.println("callback " + event);
-				Notification.show("gpioChange: " + event);
+				//Notification.show("gpioChange: " + event);
+				pin.state = event.getState();
 				refreshPins(null);
 			}
 
