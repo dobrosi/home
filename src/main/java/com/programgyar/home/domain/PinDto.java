@@ -12,7 +12,7 @@ public class PinDto extends PersistentData {
 	 */
 	private static final long serialVersionUID = 6249103365492718369L;
 
-	public GpioPin pin;
+	public transient GpioPin pin;
 
 	public String name;
 
