@@ -26,7 +26,7 @@ import com.vaadin.ui.VerticalLayout;
 @Title("HOME")
 @Theme("valo")
 @Push(transport = Transport.WEBSOCKET)
-public class MainUI extends UI implements GpioPinListenerDigital {
+public class MainUI extends UI {
 	/**
 	 * 
 	 */
@@ -51,7 +51,21 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 
 		configureComponents();
 		buildLayout();
-		// refreshPins();
+		refreshPins(null);
+		addPinListeners();
+	}
+
+	private void addPinListeners() {
+		GpioService.getPinList().forEach(pin -> pin.pin.addListener(new GpioPinListenerDigital() {
+
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+				System.out.println("callback " + event);
+				Notification.show("gpioChange: " + event);
+				refreshPins(null);
+			}
+
+		}));
 	}
 
 	private void configureComponents() {
@@ -64,10 +78,9 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 
 		pinList.setContainerDataSource(new BeanItemContainer<>(PinDto.class));
 
-		pinList.setColumnOrder("name", "address", "state");
+		pinList.setColumnOrder("name", "address", "mode", "state");
 		pinList.setSelectionMode(Grid.SelectionMode.SINGLE);
 		pinList.addSelectionListener(e -> selectedRow(e));
-		pinList.setSelectionMode(SelectionMode.SINGLE);
 	}
 
 	private void selectedRow(SelectionEvent e) {
@@ -95,12 +108,6 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 		setContent(mainLayout);
 	}
 
-	@Override
-	public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-		System.out.println("callback " + event);
-		Notification.show("gpioChange: " + event);
-	}
-
 	public void refreshPins(ClickEvent e) {
 		pinList.setContainerDataSource(new BeanItemContainer<>(PinDto.class, GpioService.getPinList()));
 		contactForm.setVisible(false);
@@ -109,8 +116,9 @@ public class MainUI extends UI implements GpioPinListenerDigital {
 	public void newPin(ClickEvent e) {
 		contactForm.edit(new PinDto());
 	}
-	
+
 	public void deletePin(ClickEvent e) {
-		GpioService.deletePin((PinDto)pinList.getSelectedRow());
+		GpioService.deletePin((PinDto) pinList.getSelectedRow());
+		refreshPins(null);
 	}
 }
