@@ -24,13 +24,6 @@ public class GpioService {
 		gpio.getProvisionedPins().forEach(f -> f.addListener(listener));
 	}
 
-	public static void startGpio(GpioPinListener l) {
-		final GpioController gpio = GpioFactory.getInstance();
-
-		gpio.provisionDigitalInputPin(RaspiPin.GPIO_00).addListener(l);
-		gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
-	}
-
 	public static GpioPin createPin(PinDto pinDto) {
 		final GpioController gpio = GpioFactory.getInstance();
 		GpioPin pin = null;

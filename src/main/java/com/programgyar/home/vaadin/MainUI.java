@@ -16,7 +16,6 @@ import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -52,6 +51,16 @@ public class MainUI extends UI {
 		configureComponents();
 		buildLayout();
 		refreshPins(null);
+		addPinListeners();
+	}
+
+	private void addPinListeners() {
+		GpioService.getPinList().forEach(pinDto -> pinDto.pin.addListener(new GpioPinListenerDigital() {
+			@Override
+			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+				refreshPins(null);
+			}
+		}));
 	}
 
 	private void configureComponents() {
