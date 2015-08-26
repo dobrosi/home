@@ -31,7 +31,7 @@ public class GpioService {
 		if (pinDto.mode == PinMode.DIGITAL_INPUT) {
 			pin = gpio.provisionDigitalInputPin(p);
 		} else if (pinDto.mode == PinMode.DIGITAL_OUTPUT) {
-			pin = gpio.provisionDigitalOutputPin(p);
+			pin = gpio.provisionDigitalOutputPin(p, pinDto.state);
 		}
 		pin.addListener(new GpioPinListenerDigital() {
 			@Override
