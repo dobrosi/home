@@ -1,11 +1,13 @@
 package com.programgyar.home.vaadin;
 
 import com.pi4j.io.gpio.PinMode;
+import com.pi4j.io.gpio.PinState;
 import com.programgyar.home.domain.PinDto;
 import com.programgyar.home.service.gpio.GpioService;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
@@ -21,6 +23,7 @@ public class PinForm extends FormLayout {
 	Button cancel = new Button("Cancel", this::cancel);
 	TextField address = new TextField("Address");
 	ComboBox mode = new ComboBox("Mode");
+	ComboBox state = new ComboBox("State");
 
 	PinDto pinDto;
 
@@ -33,6 +36,10 @@ public class PinForm extends FormLayout {
 
 	private void configureComponents() {
 		mode.addItems(PinMode.values());
+		mode.setFilteringMode(FilteringMode.OFF);
+
+		state.addItem(PinState.values());
+		state.setFilteringMode(FilteringMode.OFF);
 
 		save.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -46,7 +53,7 @@ public class PinForm extends FormLayout {
 		HorizontalLayout actions = new HorizontalLayout(save, cancel);
 		actions.setSpacing(true);
 
-		addComponents(actions, address, mode);
+		addComponents(actions, address, mode, state);
 	}
 
 	public void save(Button.ClickEvent event) {
