@@ -37,9 +37,11 @@ public class PinForm extends FormLayout {
 	private void configureComponents() {
 		mode.addItems(PinMode.values());
 		mode.setFilteringMode(FilteringMode.OFF);
+		mode.setTextInputAllowed(false);
 
-		state.addItem(PinState.values());
+		state.addItems(PinState.values());
 		state.setFilteringMode(FilteringMode.OFF);
+		state.setTextInputAllowed(false);
 
 		save.setStyleName(ValoTheme.BUTTON_PRIMARY);
 		save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
